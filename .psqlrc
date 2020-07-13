@@ -1,0 +1,53 @@
+\set QUIET 1
+
+-- Display how long commands take
+\timing
+-- Expanded output (on|off|auto)
+\x auto
+-- Will wrap long columns with …
+\pset format wrap
+-- Force expanded output for with greater than 180
+\pset columns 180
+
+-- Disables the pager
+\pset pager off
+
+-- Exit (1) when encountering an error while processing a script (psql -f ~/magic.sql)
+\set ON_ERROR_STOP on
+-- psql will issue a SAVEPOINT before every command you send to Postgres. If an error is detected, it will then issue a ROLLBACK TO the previous savepoint
+-- this only applies to interactive sessions, it will rollback the entire transaction in case of a sql script (psql -f ~/magic.sql)
+\set ON_ERROR_ROLLBACK interactive
+-- Verbose error reports
+\set VERBOSITY verbose
+
+-- Customize primary prompt: bold[(localhost/amc_deployer_db=>)]
+\set PROMPT1 '%[%033[1m%]%M/%/%R%[%033[0m%]%# '
+-- Customize secondary prompt (when not finishing the query with a semi colon): (continue] - >) 
+\set PROMPT2 '[continue] %R > '
+
+-- Autocomplete keywords (like SELECT) in upper-case
+\set COMP_KEYWORD_CASE upper
+
+-- Configure the history file per DB: ~/.psql_history-amc_deployer_db-localhost
+\set HISTFILE ~/.psql_history- :DBNAME - :HOST
+-- Configure history to ignore commands starting with a space and sequential duplicate commands. Limit to 2000 entries
+\set HISTCONTROL ignoredups
+\set HISTCONTROL ignorespace
+\set HISTSIZE 2000
+
+-- Replaces null values, default is empty
+\pset null '<NULL>'
+
+-- Cool formatting 
+\pset border 2
+\pset linestyle 'unicode'
+\pset unicode_border_linestyle single
+\pset unicode_column_linestyle single
+\pset unicode_header_linestyle double
+
+-- Helper queries, useful for analysis/troubleshooting
+\set h '\\i ~/sql/queries.psql'
+
+\unset QUIET
+
+\echo '\033[0;33m:h\033[0m - General Helper Queries'
